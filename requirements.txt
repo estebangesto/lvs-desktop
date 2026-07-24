@@ -1,0 +1,9 @@
+PySide6
+pystray
+pynput
+sounddevice
+numpy
+scipy
+requests
+pygame
+pillow
