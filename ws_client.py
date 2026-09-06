@@ -1,4 +1,4 @@
-"""Cliente REST para Luc.ia Voice Service v3.
+"""Cliente REST para LVS Voice Service v3.
 
 El nombre se conserva durante la migración desde v7, pero no usa WebSocket.
 Cada solicitud recibe una única respuesta JSON del endpoint /voice/process.
@@ -13,7 +13,7 @@ import requests
 from PySide6.QtCore import QObject, Signal
 
 
-logger = logging.getLogger("lucia-desktop")
+logger = logging.getLogger("lvs-desktop")
 
 
 class VoiceApiClient(QObject):

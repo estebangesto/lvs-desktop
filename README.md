@@ -1,10 +1,10 @@
-# Luc.ia Desktop
+# LVS Desktop
 
-Cliente Windows de Luc.ia para interacción de texto y voz sin cambiar de ventana.
+Cliente Windows de LVS para interacción de texto y voz sin cambiar de ventana.
 
 ## Alcance
 
-- Chat de texto contra `lucia-voice-service`.
+- Chat de texto contra `lvs-gateway`.
 - Voz mediante la tecla Calculadora (`VK_183`): mantener para grabar y soltar para enviar.
 - La conversación por voz muestra la transcripción y la respuesta en el chat.
 - TTS opcional para solicitudes de voz; los mensajes escritos nunca solicitan audio.
@@ -40,7 +40,7 @@ En el primer inicio se crea `ldl_config.json`:
 
 ## Logs
 
-El menú de bandeja **Modo Debug** controla el detalle de `lucia-desktop.log` y se
+El menú de bandeja **Modo Debug** controla el detalle de `lvs-desktop.log` y se
 guarda en `debug_enabled`:
 
 - Desactivado (valor inicial): conserva solo advertencias y errores.

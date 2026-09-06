@@ -25,13 +25,13 @@ from ws_client import VoiceApiClient
 TRIGGER_KEY_VK = 183
 ASSETS_DIR = os.path.join(os.path.dirname(__file__), "assets")
 TEMP_IN = "mic_capture.wav"
-TEMP_OUT = "lucia_reply.mp3"
+TEMP_OUT = "lvs_reply.mp3"
 
 # --- LOGGING ---
-logger = logging.getLogger("lucia-desktop")
+logger = logging.getLogger("lvs-desktop")
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
-file_handler = logging.FileHandler("lucia-desktop.log", encoding="utf-8")
+file_handler = logging.FileHandler("lvs-desktop.log", encoding="utf-8")
 file_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
 file_handler.setLevel(logging.WARNING)
 logger.addHandler(file_handler)
@@ -48,7 +48,7 @@ class VoiceSignals(QObject):
     append_chat = Signal(str, str) # sender, text
     clear_chat = Signal() # Signal for thread-safe clearing
 
-class LuciaDesktopLink(QMainWindow):
+class LvsDesktopLink(QMainWindow):
     def __init__(self):
         super().__init__()
         self.config_file = os.path.join(os.path.dirname(__file__), "ldl_config.json")
@@ -70,7 +70,7 @@ class LuciaDesktopLink(QMainWindow):
         self.debug_enabled = self.config.get("debug_enabled", False)
         self.tts_enabled = self.config.get("tts_enabled", True)
         configure_debug_logging(self.debug_enabled)
-        logger.debug("Inicio de Luc.ia Desktop (debug=%s, tts=%s)", self.debug_enabled, self.tts_enabled)
+        logger.debug("Inicio de LVS Desktop (debug=%s, tts=%s)", self.debug_enabled, self.tts_enabled)
         self.audio_data = []
         self.fs = 16000
 
@@ -324,7 +324,7 @@ class LuciaDesktopLink(QMainWindow):
             row_layout.addSpacing(10) # Pequeño margen derecho
             
         else:
-            name_label.setText("Luc.ia ✨")
+            name_label.setText("LVS ✨")
             name_label.setStyleSheet("color: #FFD700; margin-bottom: 2px;")
             name_label.setAlignment(Qt.AlignLeft)
             
@@ -480,11 +480,11 @@ class LuciaDesktopLink(QMainWindow):
             pystray.MenuItem("Silenciar Voz (TTS)", self.toggle_tts, checked=lambda item: not self.tts_enabled),
             pystray.MenuItem("Modo Debug", self.toggle_debug, checked=lambda item: self.debug_enabled),
             pystray.MenuItem("Limpiar Chat", lambda: self.signals.clear_chat.emit()),
-            pystray.MenuItem("Abrir Logs", lambda: os.startfile("lucia-desktop.log")),
+            pystray.MenuItem("Abrir Logs", lambda: os.startfile("lvs-desktop.log")),
             pystray.MenuItem("Editar Configuración", lambda: os.startfile(self.config_file)),
             pystray.MenuItem("Salir", self.on_exit_clicked)
         )
-        self.tray_icon = pystray.Icon("Lucia", self.icons["standby"], "Luc.ia Desktop", self.tray_menu)
+        self.tray_icon = pystray.Icon("LVS", self.icons["standby"], "LVS Desktop", self.tray_menu)
         threading.Thread(target=self.tray_icon.run, daemon=True).start()
 
     def toggle_debug(self, icon, item):
@@ -705,5 +705,5 @@ class LuciaDesktopLink(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
-    window = LuciaDesktopLink()
+    window = LvsDesktopLink()
     sys.exit(app.exec())
