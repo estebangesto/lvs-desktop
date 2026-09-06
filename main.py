@@ -51,7 +51,7 @@ class VoiceSignals(QObject):
 class LvsDesktopLink(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.config_file = os.path.join(os.path.dirname(__file__), "ldl_config.json")
+        self.config_file = os.path.join(os.path.dirname(__file__), "lvs_config.json")
         self.load_config()
 
         self.signals = VoiceSignals()
@@ -127,6 +127,9 @@ class LvsDesktopLink(QMainWindow):
             "window_width": 450,
             "window_height": 500,
             "network_timeout": 150,
+            "user_name": "User",
+            "assistant_name": "Assistant",
+            "window_title": "LVS Desktop",
         }
         if os.path.exists(self.config_file):
             try:
@@ -182,6 +185,7 @@ class LvsDesktopLink(QMainWindow):
 
     def setup_ui(self):
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Tool)
+        self.setWindowTitle(self.config["window_title"])
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.resize(self.config["window_width"], self.config["window_height"])
         
@@ -301,7 +305,7 @@ class LvsDesktopLink(QMainWindow):
         row_layout.setContentsMargins(0, 0, 0, 0)
 
         if sender == "user":
-            name_label.setText("Esteban")
+            name_label.setText(self.config["user_name"])
             name_label.setStyleSheet("color: #00BFFF; margin-bottom: 2px;")
             name_label.setAlignment(Qt.AlignRight)
             
@@ -324,7 +328,7 @@ class LvsDesktopLink(QMainWindow):
             row_layout.addSpacing(10) # Pequeño margen derecho
             
         else:
-            name_label.setText("LVS ✨")
+            name_label.setText(self.config["assistant_name"])
             name_label.setStyleSheet("color: #FFD700; margin-bottom: 2px;")
             name_label.setAlignment(Qt.AlignLeft)
             
@@ -628,7 +632,7 @@ class LvsDesktopLink(QMainWindow):
     def on_api_health(self, healthy, message):
         logger.debug("[API] Healthcheck: healthy=%s", healthy)
         if not healthy:
-            self.signals.append_chat.emit("lucia", message)
+            self.signals.append_chat.emit("assistant", message)
 
     def on_transcription_ready(self, request_id, text):
         if self.active_request_id not in (None, request_id):
@@ -645,7 +649,7 @@ class LvsDesktopLink(QMainWindow):
 
         request_type = self.active_request_type
         if result.get("response_text"):
-            self.signals.append_chat.emit("lucia", result["response_text"])
+            self.signals.append_chat.emit("assistant", result["response_text"])
 
         total_ms = result.get("_client_total_ms")
         if total_ms is not None:
@@ -665,7 +669,7 @@ class LvsDesktopLink(QMainWindow):
             return
         self.active_request_id = request_id
         logger.error("[API] %s", error)
-        self.signals.append_chat.emit("lucia", f"Error de comunicación: {error}")
+        self.signals.append_chat.emit("assistant", f"Error de comunicación: {error}")
         self.processing = False
         self.active_request_id = None
         self.active_request_type = None
@@ -685,7 +689,7 @@ class LvsDesktopLink(QMainWindow):
             self.signals.update_icon.emit("speaking")
         except Exception as exc:
             logger.error("Error de reproducción: %s", exc)
-            self.signals.append_chat.emit("lucia", "Recibí la respuesta, pero no pude reproducir el audio.")
+            self.signals.append_chat.emit("assistant", "Recibí la respuesta, pero no pude reproducir el audio.")
             self.speaking = False
             self.signals.update_icon.emit("standby")
 

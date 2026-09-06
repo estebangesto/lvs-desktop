@@ -25,7 +25,7 @@ La URL por defecto es `http://127.0.0.1:8001`.
 
 ## Configuración
 
-En el primer inicio se crea `ldl_config.json`:
+En el primer inicio se crea `lvs_config.json`:
 
 ```json
 {
@@ -34,7 +34,10 @@ En el primer inicio se crea `ldl_config.json`:
   "debug_enabled": false,
   "window_width": 450,
   "window_height": 500,
-  "network_timeout": 150
+  "network_timeout": 150,
+  "user_name": "User",
+  "assistant_name": "Assistant",
+  "window_title": "LVS Desktop"
 }
 ```
 
